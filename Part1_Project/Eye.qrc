@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>eyeicon.png</file>
+        <file>line.png</file>
+        <file>eyeline.jpg</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>bazi2nafare</class>
+ <widget class="QDialog" name="bazi2nafare">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1020</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>80</y>
+     <width>591</width>
+     <height>491</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color : white ;</string>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QLabel" name="Enrol_lab">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>10</y>
+      <width>101</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-right : 5px double black ;
+border-left : none ;
+border-top : none ;
+border-bottom :3px solid black ;
+font: 25pt &quot;B Arshia&quot;;</string>
+    </property>
+    <property name="text">
+     <string>ثبت نام</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="num_lab">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>50</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none; 
+font: 10pt &quot;B Sara&quot;;</string>
+    </property>
+    <property name="text">
+     <string>کاربر اول</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Email_lab">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>220</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none ;</string>
+    </property>
+    <property name="text">
+     <string>ایمیل :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_Email">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>220</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid grey ;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Enroll">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>440</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid green ;
+background-color : #10ac84 ;</string>
+    </property>
+    <property name="text">
+     <string>ثبت نام</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Password_lab">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>140</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none ;</string>
+    </property>
+    <property name="text">
+     <string>رمز عبور :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_Password">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>140</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid grey ;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Username_lab">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>100</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none ;</string>
+    </property>
+    <property name="text">
+     <string>نام کاربری :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_Username">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>100</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid grey ;
+</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Phonenum_lab">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>180</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none ;</string>
+    </property>
+    <property name="text">
+     <string>تلفن همراه :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_Phonenum">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>180</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid grey ;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Balance_lab">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>260</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none ;</string>
+    </property>
+    <property name="text">
+     <string>موجودی بانکی :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_Balance">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>260</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid grey ;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Kapcha_lab">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>300</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none ;</string>
+    </property>
+    <property name="text">
+     <string>کپچا :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_Kapcha">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>300</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid grey ;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lang_lab">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>410</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;B Sara&quot;;
+border : none ;</string>
+    </property>
+    <property name="text">
+     <string>تغییر زبان </string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_Lang">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>450</y>
+      <width>73</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid black ;
+background-color : #d2dae2</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Eye_2">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>140</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none;
+image: url(:/eyeicon.png);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_Phone">
+    <property name="geometry">
+     <rect>
+      <x>152</x>
+      <y>180</y>
+      <width>81</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid black ;
+background-color : #d2dae2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="kapcha_show">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>340</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid grey ;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_generate_kapcha">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>390</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">image : url(:/reseticon.png) ;
+border : none;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_eyeline_2">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>140</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none ;
+image: url(:/eyeline.jpg);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

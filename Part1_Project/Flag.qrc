@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>venezolaflag.png</file>
+        <file>iranflag.png</file>
+        <file>pakestanflag.png</file>
+        <file>canadaflag.png</file>
+        <file>vietnamflag.png</file>
+        <file>soedflag.png</file>
+        <file>lahestanflag.png</file>
+        <file>holandflag.png</file>
+    </qresource>
+</RCC>

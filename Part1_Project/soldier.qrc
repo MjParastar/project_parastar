@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/Crown_FirstPage"/>
+    <qresource prefix="/">
+        <file>soldier1.png</file>
+        <file>soldier2.png</file>
+    </qresource>
+</RCC>
