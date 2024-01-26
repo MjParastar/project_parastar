@@ -1,24 +1,657 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>bazi3nafare_game</class>
- <widget name="bazi3nafare_game" class="QMainWindow">
+ <widget class="QMainWindow" name="bazi3nafare_game">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>966</width>
+    <height>589</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget name="menubar" class="QMenuBar"/>
-  <widget name="centralwidget" class="QWidget"/>
-  <widget name="statusbar" class="QStatusBar"/>
+  <property name="styleSheet">
+   <string notr="true">background-color : white ;</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>689</x>
+      <y>20</y>
+      <width>271</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : none ;</string>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QLabel" name="label_name">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>10</y>
+       <width>121</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 25pt &quot;B Arshia&quot;;
+background-color : #10ac84 ;
+border : 1px solid black ;
+border-radius : 30px ;</string>
+     </property>
+     <property name="text">
+      <string> نام بازیکن :</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_coin">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>90</y>
+       <width>121</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 25pt &quot;B Arshia&quot;;
+background-color : #10ac84 ;
+border : 1px solid black ;
+border-radius : 30px ;</string>
+     </property>
+     <property name="text">
+      <string>      سکه :</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_worker">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>170</y>
+       <width>121</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 25pt &quot;B Arshia&quot;;
+background-color : #10ac84 ;
+border : 1px solid black ;
+border-radius : 30px ;</string>
+     </property>
+     <property name="text">
+      <string>      کارگر :</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_store">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>250</y>
+       <width>121</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 25pt &quot;B Arshia&quot;;
+background-color : #10ac84 ;
+border : 1px solid black ;
+border-radius : 30px ;</string>
+     </property>
+     <property name="text">
+      <string> فروشگاه :</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_kill">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>330</y>
+       <width>121</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 25pt &quot;B Arshia&quot;;
+background-color : #10ac84 ;
+border : 1px solid black ;
+border-radius : 30px ;</string>
+     </property>
+     <property name="text">
+      <string>  کشتار گاه :</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lab_display_name">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>111</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border : 1px solid black ;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lab_display_coin">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>100</y>
+       <width>61</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border : 1px solid black ;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lab_display_worker">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>180</y>
+       <width>61</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border : 1px solid black ;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_balance_product">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>410</y>
+       <width>151</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 25pt &quot;B Arshia&quot;;
+background-color : #10ac84 ;
+border : 1px solid black ;
+border-radius : 30px ;</string>
+     </property>
+     <property name="text">
+      <string>موجودی</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_store">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>260</y>
+       <width>111</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border : 1px solid black ;
+background-color : #d2dae2</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_kill">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>340</y>
+       <width>111</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border : 1px solid black ;
+background-color : #d2dae2</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_timer">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>450</y>
+      <width>191</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 5px solid #10ac84 ;
+text-align : center ;
+font: 20pt &quot;Bodoni MT Condensed&quot;;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>20</y>
+      <width>631</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border : 1px solid grey ;</string>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QComboBox" name="combobox_11">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #2ecc71 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_12">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>0</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_13">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>0</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_14">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>0</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_15">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>0</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_16">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>0</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_17">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>0</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_21">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>100</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_22">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>100</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_23">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>100</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_24">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>100</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_25">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>100</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_26">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>100</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_27">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>100</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_31">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>200</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_32">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>200</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_33">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>200</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_34">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>200</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_35">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>200</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_36">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>200</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_37">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>200</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_47">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>300</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_46">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>300</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_45">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>300</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_44">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>300</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_43">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>300</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_42">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>300</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combobox_41">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>300</y>
+       <width>91</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color : #ffeaa7 ;</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>430</y>
+      <width>201</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 20pt &quot;B Titr&quot;;
+border : 2px solid black ;
+background-color : #d2dae2</string>
+    </property>
+    <property name="text">
+     <string>     کاربر اول</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>966</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <pixmapfunction/>
+ <resources/>
  <connections/>
 </ui>

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "QTime"
 #include "QTimer"
+#include <QtMultimedia>
 
 namespace Ui {
 class bazi2nafare_game;
@@ -18,7 +19,6 @@ public:
     ~bazi2nafare_game();
 
 private slots:
-
     void updateCountdown();
 
     void on_pushbutton_balance_product_clicked();
@@ -105,6 +105,8 @@ private slots:
 
     void savecoin_database() ;
 
+    void update_data() ;
+
 private:
     Ui::bazi2nafare_game *ui;
 
@@ -112,6 +114,7 @@ private:
     QTime countdownTime;
 
     QTimer timer_takhir ;
+
 };
 
 #endif // BAZI2NAFARE_GAME_H

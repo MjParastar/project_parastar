@@ -1,4 +1,5 @@
-QT       += core gui sql
+QT       += core gui sql multimedia
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,7 +17,10 @@ SOURCES += \
     bazi4nafare.cpp \
     bazi4nafare_game.cpp \
     main.cpp \
-    firstpage.cpp
+    firstpage.cpp \
+    winner_2nafare_game.cpp \
+    winner_3nafare_game.cpp \
+    winner_4nafare_game.cpp
 
 HEADERS += \
     bazi2nafare.h \
@@ -25,7 +29,10 @@ HEADERS += \
     bazi3nafare_game.h \
     bazi4nafare.h \
     bazi4nafare_game.h \
-    firstpage.h
+    firstpage.h \
+    winner_2nafare_game.h \
+    winner_3nafare_game.h \
+    winner_4nafare_game.h
 
 FORMS += \
     bazi2nafare.ui \
@@ -35,7 +42,9 @@ FORMS += \
     bazi4nafare.ui \
     bazi4nafare_game.ui \
     firstpage.ui \
-    gameWindow.ui
+    winner_2nafare_game.ui \
+    winner_3nafare_game.ui \
+    winner_4nafare_game.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -46,6 +55,7 @@ RESOURCES += \
     Eye.qrc \
     Flag.qrc \
     animal.qrc \
+    music.qrc \
     reseticon.qrc \
     soldier.qrc
 

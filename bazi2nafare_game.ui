@@ -119,7 +119,7 @@ border-radius : 30px ;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">border : 1px solid black ;
-background-color : #d2dae2</string>
+background-color : #d2dae2 ;</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushbutton_balance_product">
@@ -223,7 +223,7 @@ border-radius : 30px ;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">border : 1px solid black ;
-background-color : #d2dae2</string>
+background-color : #d2dae2 ;</string>
      </property>
     </widget>
    </widget>
@@ -620,14 +620,12 @@ background-color : #d2dae2</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 25pt &quot;B Sara&quot;;
-border-top : 10px double black ;
-border-bottom : 1px ridge black ;
-border-right : 1px ridge black ;
-border-left : 1px ridge black ;</string>
+     <string notr="true">font: 75 20pt &quot;B Titr&quot;;
+border : 2px solid black ;
+background-color : #d2dae2</string>
     </property>
     <property name="text">
-     <string>   کاربر اول</string>
+     <string>     کاربر اول</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_timer">

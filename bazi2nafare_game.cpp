@@ -1,6 +1,10 @@
 #include "bazi2nafare_game.h"
 #include "ui_bazi2nafare_game.h"
 
+#include "winner_2nafare_game.h"
+
+#include "iostream"
+
 #include <QSqlDatabase>
 #include "QSqlDriver"
 #include "QSqlQuery"
@@ -12,6 +16,10 @@
 #include "QTime"
 #include "QMessageBox"
 #include "QDebug"
+
+#include <QtMultimedia>
+#include <QDebug>
+#include "QSqlError"
 
 int coin = 10 ;
 int worker_num = 1 ;
@@ -27,6 +35,9 @@ int milk_sheep{0} ;
 int wheat_product{0} ;
 int barley_product{0} ;
 
+int a = 1 ;
+
+
 bazi2nafare_game::bazi2nafare_game(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::bazi2nafare_game)
@@ -37,17 +48,34 @@ bazi2nafare_game::bazi2nafare_game(QWidget *parent) :
     QSqlDatabase database ;
     database = QSqlDatabase::addDatabase("QSQLITE") ;
     database.setDatabaseName("C:\\Personal\\AdvancedMabani\\ProjectQt\\Database\\Player.db") ;
-    database.open() ;
 
     if (database.open())
     {
-            QSqlQuery query("SELECT Username FROM Player LIMIT 1");
-            if (query.next())
-            {
-                QString name = query.value(0).toString();
-                ui->lab_display_name->setText(name);
-             }
+        QSqlQuery query;
+        if(a == 1)
+        {
+            query.prepare("SELECT Username FROM Player LIMIT 1");
+        }
+        else
+        {
+            query.prepare("SELECT Username FROM Player LIMIT 1 OFFSET 1");
+        }
+
+        if (query.exec() && query.next())
+        {
+            QString name = query.value(0).toString();
+            ui->lab_display_name->setText(name);
+        }
+        else
+        {
+            qDebug() << query.lastError();
+        }
     }
+    else
+    {
+        qDebug() << database.lastError();
+    }
+
 
     //relate coin
     QSqlDatabase database_2 ;
@@ -55,7 +83,11 @@ bazi2nafare_game::bazi2nafare_game(QWidget *parent) :
     database.setDatabaseName("C:\\Personal\\AdvancedMabani\\ProjectQt\\Database\\coin.db") ;
     database.open() ;
 
+    if(a == 2)
+    {
+        ui->label_6->setText("   کاربر دوم") ;
 
+    }
 
     ui->lab_display_name->setAlignment(Qt::AlignCenter);
 
@@ -350,7 +382,6 @@ bazi2nafare_game::bazi2nafare_game(QWidget *parent) :
       ui->combobox_47->addItem("گوسفند") ;
       ui->combobox_47->addItem("گاو") ;
       ui->combobox_47->addItem("برداشت") ;
-
 }
 
 // timer
@@ -363,9 +394,48 @@ void bazi2nafare_game::updateCountdown()
     {
         savecoin_database() ;
 
-        timer->stop();
-        QMessageBox::information(this, "زمان", "پایان وقت!");
+        timer->stop() ;
+        QMessageBox::information(this, "زمان", "پایان وقت!") ;
+
+        if(a == 1)
+        {
+            update_data() ;
+            a++ ;
+
+            this->hide() ;
+            bazi2nafare_game *w3 = new bazi2nafare_game ;
+            w3->show() ;
+        }
+
+        else
+        {
+            this->hide() ;
+            winner_2nafare_game *w2 = new winner_2nafare_game ;
+            w2->show() ;
+        }
     }
+}
+
+void bazi2nafare_game::update_data()
+{
+    coin = 10 ;
+    worker_num = 1 ;
+    hen = 0 ;
+    sheep = 0;
+    cow = 0 ;
+    wheat = 0 ;
+    barley = 0 ;
+    free_worker = 1;
+    land = 1 ;
+    buy_land = 0 ;
+    free_hen = 0 ;
+    free_sheep = 0 ;
+    free_cow = 0;
+    Egg = 0 ;
+    milk_cow = 0 ;
+    milk_sheep = 0 ;
+    wheat_product = 0 ;
+    barley_product = 0 ;
 }
 
 void bazi2nafare_game::savecoin_database()
@@ -373,8 +443,7 @@ void bazi2nafare_game::savecoin_database()
     QString coin_1 = ui->lab_display_coin->text();
     QSqlQuery q ;
 
-    q.exec("INSERT INTO Winner_PLayer(`coin`) values('"+coin_1+"')");
-
+    q.exec("INSERT INTO WinnerPLayer(`coin`) values('"+coin_1+"')");
 }
 
 
@@ -1803,6 +1872,7 @@ void bazi2nafare_game::on_combobox_12_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_12->setCurrentText("") ;
                 break;
             }
         }
@@ -1835,6 +1905,7 @@ void bazi2nafare_game::on_combobox_12_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_12->setCurrentText("") ;
                 break;
             }
         }
@@ -1849,7 +1920,7 @@ void bazi2nafare_game::on_combobox_12_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -1868,6 +1939,7 @@ void bazi2nafare_game::on_combobox_12_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_12->setCurrentText("") ;
                 break;
             }
         }
@@ -1883,7 +1955,7 @@ void bazi2nafare_game::on_combobox_12_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -1903,6 +1975,7 @@ void bazi2nafare_game::on_combobox_12_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_12->setCurrentText("") ;
                 break;
             }
         }
@@ -1917,7 +1990,7 @@ void bazi2nafare_game::on_combobox_12_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -1936,6 +2009,7 @@ void bazi2nafare_game::on_combobox_12_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_12->setCurrentText("") ;
                 break;
             }
         }
@@ -2331,6 +2405,7 @@ void bazi2nafare_game::on_combobox_13_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_13->setCurrentText("") ;
                 break;
             }
         }
@@ -2345,7 +2420,7 @@ void bazi2nafare_game::on_combobox_13_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -2364,6 +2439,7 @@ void bazi2nafare_game::on_combobox_13_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_13->setCurrentText("") ;
                 break;
             }
         }
@@ -2378,7 +2454,7 @@ void bazi2nafare_game::on_combobox_13_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -2398,6 +2474,7 @@ void bazi2nafare_game::on_combobox_13_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_13->setCurrentText("") ;
                 break;
             }
         }
@@ -2412,7 +2489,7 @@ void bazi2nafare_game::on_combobox_13_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -2431,6 +2508,7 @@ void bazi2nafare_game::on_combobox_13_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_13->setCurrentText("") ;
                 break;
             }
         }
@@ -2792,6 +2870,7 @@ void bazi2nafare_game::on_combobox_14_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_14->setCurrentText("") ;
                 break;
             }
         }
@@ -2825,6 +2904,7 @@ void bazi2nafare_game::on_combobox_14_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_14->setCurrentText("") ;
                 break;
             }
         }
@@ -2839,7 +2919,7 @@ void bazi2nafare_game::on_combobox_14_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -2858,6 +2938,7 @@ void bazi2nafare_game::on_combobox_14_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_14->setCurrentText("") ;
                 break;
             }
         }
@@ -2872,7 +2953,7 @@ void bazi2nafare_game::on_combobox_14_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -2892,6 +2973,7 @@ void bazi2nafare_game::on_combobox_14_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_14->setCurrentText("") ;
                 break;
             }
         }
@@ -2906,7 +2988,7 @@ void bazi2nafare_game::on_combobox_14_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -2925,6 +3007,7 @@ void bazi2nafare_game::on_combobox_14_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_14->setCurrentText("") ;
                 break;
             }
         }
@@ -3287,6 +3370,7 @@ void bazi2nafare_game::on_combobox_15_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_15->setCurrentText("") ;
                 break;
             }
         }
@@ -3320,6 +3404,7 @@ void bazi2nafare_game::on_combobox_15_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_15->setCurrentText("") ;
                 break;
             }
         }
@@ -3334,7 +3419,7 @@ void bazi2nafare_game::on_combobox_15_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -3353,6 +3438,7 @@ void bazi2nafare_game::on_combobox_15_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_15->setCurrentText("") ;
                 break;
             }
         }
@@ -3367,7 +3453,7 @@ void bazi2nafare_game::on_combobox_15_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -3387,6 +3473,7 @@ void bazi2nafare_game::on_combobox_15_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_15->setCurrentText("") ;
                 break;
             }
         }
@@ -3401,7 +3488,7 @@ void bazi2nafare_game::on_combobox_15_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -3420,6 +3507,7 @@ void bazi2nafare_game::on_combobox_15_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_15->setCurrentText("") ;
                 break;
             }
         }
@@ -3782,6 +3870,7 @@ void bazi2nafare_game::on_combobox_16_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_16->setCurrentText("") ;
                 break;
             }
         }
@@ -3815,6 +3904,7 @@ void bazi2nafare_game::on_combobox_16_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_16->setCurrentText("") ;
                 break;
             }
         }
@@ -3830,7 +3920,7 @@ void bazi2nafare_game::on_combobox_16_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -3849,6 +3939,7 @@ void bazi2nafare_game::on_combobox_16_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_16->setCurrentText("") ;
                 break;
             }
         }
@@ -3864,7 +3955,7 @@ void bazi2nafare_game::on_combobox_16_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -3884,6 +3975,7 @@ void bazi2nafare_game::on_combobox_16_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_16->setCurrentText("") ;
                 break;
             }
         }
@@ -3898,7 +3990,7 @@ void bazi2nafare_game::on_combobox_16_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -3917,6 +4009,7 @@ void bazi2nafare_game::on_combobox_16_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_16->setCurrentText("") ;
                 break;
             }
         }
@@ -4279,6 +4372,7 @@ void bazi2nafare_game::on_combobox_17_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_17->setCurrentText("") ;
                 break;
             }
         }
@@ -4311,6 +4405,7 @@ void bazi2nafare_game::on_combobox_17_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_17->setCurrentText("") ;
                 break;
             }
         }
@@ -4326,7 +4421,7 @@ void bazi2nafare_game::on_combobox_17_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -4345,6 +4440,7 @@ void bazi2nafare_game::on_combobox_17_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_17->setCurrentText("") ;
                 break;
             }
         }
@@ -4360,7 +4456,7 @@ void bazi2nafare_game::on_combobox_17_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -4380,6 +4476,7 @@ void bazi2nafare_game::on_combobox_17_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_17->setCurrentText("") ;
                 break;
             }
         }
@@ -4394,7 +4491,7 @@ void bazi2nafare_game::on_combobox_17_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -4413,6 +4510,7 @@ void bazi2nafare_game::on_combobox_17_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_17->setCurrentText("") ;
                 break;
             }
         }
@@ -4741,6 +4839,7 @@ void bazi2nafare_game::on_combobox_11_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_11->setCurrentText("") ;
                 break;
             }
         }
@@ -4773,6 +4872,7 @@ void bazi2nafare_game::on_combobox_11_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_11->setCurrentText("") ;
                 break;
             }
         }
@@ -4787,7 +4887,7 @@ void bazi2nafare_game::on_combobox_11_activated(int index)
 
     case 3 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -4806,6 +4906,7 @@ void bazi2nafare_game::on_combobox_11_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_11->setCurrentText("") ;
                 break;
             }
         }
@@ -4821,7 +4922,7 @@ void bazi2nafare_game::on_combobox_11_activated(int index)
 
     case 4 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -4841,6 +4942,7 @@ void bazi2nafare_game::on_combobox_11_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_11->setCurrentText("") ;
                 break;
             }
         }
@@ -4855,7 +4957,7 @@ void bazi2nafare_game::on_combobox_11_activated(int index)
 
     case 5 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -4874,6 +4976,7 @@ void bazi2nafare_game::on_combobox_11_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_11->setCurrentText("") ;
                 break;
             }
         }
@@ -5235,6 +5338,7 @@ void bazi2nafare_game::on_combobox_21_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_21->setCurrentText("") ;
                 break;
             }
         }
@@ -5267,6 +5371,7 @@ void bazi2nafare_game::on_combobox_21_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_21->setCurrentText("") ;
                 break;
             }
         }
@@ -5282,7 +5387,7 @@ void bazi2nafare_game::on_combobox_21_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -5301,6 +5406,7 @@ void bazi2nafare_game::on_combobox_21_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_21->setCurrentText("") ;
                 break;
             }
         }
@@ -5316,7 +5422,7 @@ void bazi2nafare_game::on_combobox_21_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -5336,6 +5442,7 @@ void bazi2nafare_game::on_combobox_21_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_21->setCurrentText("") ;
                 break;
             }
         }
@@ -5350,7 +5457,7 @@ void bazi2nafare_game::on_combobox_21_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -5369,6 +5476,7 @@ void bazi2nafare_game::on_combobox_21_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_21->setCurrentText("") ;
                 break;
             }
         }
@@ -5729,6 +5837,7 @@ void bazi2nafare_game::on_combobox_22_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_22->setCurrentText("") ;
                 break;
             }
         }
@@ -5761,6 +5870,7 @@ void bazi2nafare_game::on_combobox_22_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_22->setCurrentText("") ;
                 break;
             }
         }
@@ -5776,7 +5886,7 @@ void bazi2nafare_game::on_combobox_22_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -5795,6 +5905,7 @@ void bazi2nafare_game::on_combobox_22_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_22->setCurrentText("") ;
                 break;
             }
         }
@@ -5810,7 +5921,7 @@ void bazi2nafare_game::on_combobox_22_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -5830,6 +5941,7 @@ void bazi2nafare_game::on_combobox_22_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_22->setCurrentText("") ;
                 break;
             }
         }
@@ -5844,7 +5956,7 @@ void bazi2nafare_game::on_combobox_22_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -5863,6 +5975,7 @@ void bazi2nafare_game::on_combobox_22_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_22->setCurrentText("") ;
                 break;
             }
         }
@@ -6223,6 +6336,7 @@ void bazi2nafare_game::on_combobox_23_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_23->setCurrentText("") ;
                 break;
             }
         }
@@ -6255,6 +6369,7 @@ void bazi2nafare_game::on_combobox_23_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_23->setCurrentText("") ;
                 break;
             }
         }
@@ -6270,7 +6385,7 @@ void bazi2nafare_game::on_combobox_23_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -6289,6 +6404,7 @@ void bazi2nafare_game::on_combobox_23_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_23->setCurrentText("") ;
                 break;
             }
         }
@@ -6304,7 +6420,7 @@ void bazi2nafare_game::on_combobox_23_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -6324,6 +6440,7 @@ void bazi2nafare_game::on_combobox_23_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_23->setCurrentText("") ;
                 break;
             }
         }
@@ -6338,7 +6455,7 @@ void bazi2nafare_game::on_combobox_23_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -6357,6 +6474,7 @@ void bazi2nafare_game::on_combobox_23_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_23->setCurrentText("") ;
                 break;
             }
         }
@@ -6717,6 +6835,7 @@ void bazi2nafare_game::on_combobox_24_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_24->setCurrentText("") ;
                 break;
             }
         }
@@ -6749,6 +6868,7 @@ void bazi2nafare_game::on_combobox_24_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_24->setCurrentText("") ;
                 break;
             }
         }
@@ -6764,7 +6884,7 @@ void bazi2nafare_game::on_combobox_24_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -6783,6 +6903,7 @@ void bazi2nafare_game::on_combobox_24_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_24->setCurrentText("") ;
                 break;
             }
         }
@@ -6798,7 +6919,7 @@ void bazi2nafare_game::on_combobox_24_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -6818,6 +6939,7 @@ void bazi2nafare_game::on_combobox_24_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_24->setCurrentText("") ;
                 break;
             }
         }
@@ -6832,7 +6954,7 @@ void bazi2nafare_game::on_combobox_24_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -6851,6 +6973,7 @@ void bazi2nafare_game::on_combobox_24_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_24->setCurrentText("") ;
                 break;
             }
         }
@@ -7210,6 +7333,7 @@ void bazi2nafare_game::on_combobox_25_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_25->setCurrentText("") ;
                 break;
             }
         }
@@ -7242,6 +7366,7 @@ void bazi2nafare_game::on_combobox_25_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_25->setCurrentText("") ;
                 break;
             }
         }
@@ -7256,7 +7381,7 @@ void bazi2nafare_game::on_combobox_25_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -7275,6 +7400,7 @@ void bazi2nafare_game::on_combobox_25_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_25->setCurrentText("") ;
                 break;
             }
         }
@@ -7290,7 +7416,7 @@ void bazi2nafare_game::on_combobox_25_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -7310,6 +7436,7 @@ void bazi2nafare_game::on_combobox_25_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_25->setCurrentText("") ;
                 break;
             }
         }
@@ -7324,7 +7451,7 @@ void bazi2nafare_game::on_combobox_25_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -7343,6 +7470,7 @@ void bazi2nafare_game::on_combobox_25_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_25->setCurrentText("") ;
                 break;
             }
         }
@@ -7703,6 +7831,7 @@ void bazi2nafare_game::on_combobox_26_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_26->setCurrentText("") ;
                 break;
             }
         }
@@ -7735,6 +7864,7 @@ void bazi2nafare_game::on_combobox_26_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_26->setCurrentText("") ;
                 break;
             }
         }
@@ -7750,7 +7880,7 @@ void bazi2nafare_game::on_combobox_26_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -7769,6 +7899,7 @@ void bazi2nafare_game::on_combobox_26_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_26->setCurrentText("") ;
                 break;
             }
         }
@@ -7784,7 +7915,7 @@ void bazi2nafare_game::on_combobox_26_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -7804,6 +7935,7 @@ void bazi2nafare_game::on_combobox_26_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_26->setCurrentText("") ;
                 break;
             }
         }
@@ -7818,7 +7950,7 @@ void bazi2nafare_game::on_combobox_26_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -7837,6 +7969,7 @@ void bazi2nafare_game::on_combobox_26_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_26->setCurrentText("") ;
                 break;
             }
         }
@@ -8196,6 +8329,7 @@ void bazi2nafare_game::on_combobox_27_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_27->setCurrentText("") ;
                 break;
             }
         }
@@ -8228,6 +8362,7 @@ void bazi2nafare_game::on_combobox_27_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_27->setCurrentText("") ;;
                 break;
             }
         }
@@ -8243,7 +8378,7 @@ void bazi2nafare_game::on_combobox_27_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -8277,7 +8412,7 @@ void bazi2nafare_game::on_combobox_27_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -8297,6 +8432,7 @@ void bazi2nafare_game::on_combobox_27_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_27->setCurrentText("") ;
                 break;
             }
         }
@@ -8311,7 +8447,7 @@ void bazi2nafare_game::on_combobox_27_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -8330,6 +8466,7 @@ void bazi2nafare_game::on_combobox_27_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_27->setCurrentText("") ;
                 break;
             }
         }
@@ -8691,6 +8828,7 @@ void bazi2nafare_game::on_combobox_31_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_31->setCurrentText("") ;
                 break;
             }
         }
@@ -8723,6 +8861,7 @@ void bazi2nafare_game::on_combobox_31_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_31->setCurrentText("") ;
                 break;
             }
         }
@@ -8737,7 +8876,7 @@ void bazi2nafare_game::on_combobox_31_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -8756,6 +8895,7 @@ void bazi2nafare_game::on_combobox_31_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_31->setCurrentText("") ;
                 break;
             }
         }
@@ -8772,7 +8912,7 @@ void bazi2nafare_game::on_combobox_31_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -8792,6 +8932,7 @@ void bazi2nafare_game::on_combobox_31_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_31->setCurrentText("") ;
                 break;
             }
         }
@@ -8806,7 +8947,7 @@ void bazi2nafare_game::on_combobox_31_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -8825,6 +8966,7 @@ void bazi2nafare_game::on_combobox_31_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_31->setCurrentText("") ;
                 break;
             }
         }
@@ -9185,6 +9327,7 @@ void bazi2nafare_game::on_combobox_32_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_32->setCurrentText("") ;
                 break;
             }
         }
@@ -9217,6 +9360,7 @@ void bazi2nafare_game::on_combobox_32_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_32->setCurrentText("") ;
                 break;
             }
         }
@@ -9231,7 +9375,7 @@ void bazi2nafare_game::on_combobox_32_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -9250,6 +9394,7 @@ void bazi2nafare_game::on_combobox_32_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_32->setCurrentText("") ;
                 break;
             }
         }
@@ -9266,7 +9411,7 @@ void bazi2nafare_game::on_combobox_32_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -9286,6 +9431,7 @@ void bazi2nafare_game::on_combobox_32_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_32->setCurrentText("") ;
                 break;
             }
         }
@@ -9300,7 +9446,7 @@ void bazi2nafare_game::on_combobox_32_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -9319,6 +9465,7 @@ void bazi2nafare_game::on_combobox_32_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_32->setCurrentText("") ;
                 break;
             }
         }
@@ -9679,6 +9826,7 @@ void bazi2nafare_game::on_combobox_33_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_33->setCurrentText("") ;
                 break;
             }
         }
@@ -9711,6 +9859,7 @@ void bazi2nafare_game::on_combobox_33_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_33->setCurrentText("") ;
                 break;
             }
         }
@@ -9726,7 +9875,7 @@ void bazi2nafare_game::on_combobox_33_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -9745,6 +9894,7 @@ void bazi2nafare_game::on_combobox_33_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_33->setCurrentText("") ;
                 break;
             }
         }
@@ -9762,7 +9912,7 @@ void bazi2nafare_game::on_combobox_33_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -9782,6 +9932,7 @@ void bazi2nafare_game::on_combobox_33_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_33->setCurrentText("") ;
                 break;
             }
         }
@@ -9796,7 +9947,7 @@ void bazi2nafare_game::on_combobox_33_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -9815,6 +9966,7 @@ void bazi2nafare_game::on_combobox_33_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_33->setCurrentText("") ;
                 break;
             }
         }
@@ -10176,6 +10328,7 @@ void bazi2nafare_game::on_combobox_34_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_34->setCurrentText("") ;
                 break;
             }
         }
@@ -10207,6 +10360,7 @@ void bazi2nafare_game::on_combobox_34_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_34->setCurrentText("") ;
                 break;
             }
         }
@@ -10222,7 +10376,7 @@ void bazi2nafare_game::on_combobox_34_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -10241,6 +10395,7 @@ void bazi2nafare_game::on_combobox_34_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_34->setCurrentText("") ;
                 break;
             }
         }
@@ -10258,7 +10413,7 @@ void bazi2nafare_game::on_combobox_34_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -10278,6 +10433,7 @@ void bazi2nafare_game::on_combobox_34_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_34->setCurrentText("") ;
                 break;
             }
         }
@@ -10292,7 +10448,7 @@ void bazi2nafare_game::on_combobox_34_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -10311,6 +10467,7 @@ void bazi2nafare_game::on_combobox_34_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_34->setCurrentText("") ;
                 break;
             }
         }
@@ -10672,6 +10829,7 @@ void bazi2nafare_game::on_combobox_35_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_35->setCurrentText("") ;
                 break;
             }
         }
@@ -10704,6 +10862,7 @@ void bazi2nafare_game::on_combobox_35_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_35->setCurrentText("") ;
                 break;
             }
         }
@@ -10719,7 +10878,7 @@ void bazi2nafare_game::on_combobox_35_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -10738,6 +10897,7 @@ void bazi2nafare_game::on_combobox_35_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_35->setCurrentText("") ;
                 break;
             }
         }
@@ -10754,7 +10914,7 @@ void bazi2nafare_game::on_combobox_35_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -10774,6 +10934,7 @@ void bazi2nafare_game::on_combobox_35_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_35->setCurrentText("") ;
                 break;
             }
         }
@@ -10788,7 +10949,7 @@ void bazi2nafare_game::on_combobox_35_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -10807,6 +10968,7 @@ void bazi2nafare_game::on_combobox_35_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_35->setCurrentText("") ;
                 break;
             }
         }
@@ -11168,6 +11330,7 @@ void bazi2nafare_game::on_combobox_36_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_36->setCurrentText("") ;
                 break;
             }
         }
@@ -11214,7 +11377,7 @@ void bazi2nafare_game::on_combobox_36_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -11233,6 +11396,7 @@ void bazi2nafare_game::on_combobox_36_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_36->setCurrentText("") ;
                 break;
             }
         }
@@ -11248,7 +11412,7 @@ void bazi2nafare_game::on_combobox_36_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -11268,6 +11432,7 @@ void bazi2nafare_game::on_combobox_36_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_36->setCurrentText("") ;
                 break;
             }
         }
@@ -11282,7 +11447,7 @@ void bazi2nafare_game::on_combobox_36_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -11301,6 +11466,7 @@ void bazi2nafare_game::on_combobox_36_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_36->setCurrentText("") ;
                 break;
             }
         }
@@ -11662,6 +11828,7 @@ void bazi2nafare_game::on_combobox_37_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_37->setCurrentText("") ;
                 break;
             }
         }
@@ -11694,6 +11861,7 @@ void bazi2nafare_game::on_combobox_37_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_37->setCurrentText("") ;
                 break;
             }
         }
@@ -11709,7 +11877,7 @@ void bazi2nafare_game::on_combobox_37_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -11728,6 +11896,7 @@ void bazi2nafare_game::on_combobox_37_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_37->setCurrentText("") ;
                 break;
             }
         }
@@ -11745,7 +11914,7 @@ void bazi2nafare_game::on_combobox_37_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -11765,6 +11934,7 @@ void bazi2nafare_game::on_combobox_37_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_37->setCurrentText("") ;
                 break;
             }
         }
@@ -11779,7 +11949,7 @@ void bazi2nafare_game::on_combobox_37_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -11798,6 +11968,7 @@ void bazi2nafare_game::on_combobox_37_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_37->setCurrentText("") ;
                 break;
             }
         }
@@ -12158,6 +12329,7 @@ void bazi2nafare_game::on_combobox_41_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_41->setCurrentText("") ;
                 break;
             }
         }
@@ -12190,6 +12362,7 @@ void bazi2nafare_game::on_combobox_41_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_41->setCurrentText("") ;
                 break;
             }
         }
@@ -12205,7 +12378,7 @@ void bazi2nafare_game::on_combobox_41_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -12224,6 +12397,7 @@ void bazi2nafare_game::on_combobox_41_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_41->setCurrentText("") ;
                 break;
             }
         }
@@ -12253,7 +12427,7 @@ void bazi2nafare_game::on_combobox_41_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -12273,6 +12447,7 @@ void bazi2nafare_game::on_combobox_41_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_41->setCurrentText("") ;
                 break;
             }
         }
@@ -12287,7 +12462,7 @@ void bazi2nafare_game::on_combobox_41_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -12306,6 +12481,7 @@ void bazi2nafare_game::on_combobox_41_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_41->setCurrentText("") ;
                 break;
             }
         }
@@ -12667,6 +12843,7 @@ void bazi2nafare_game::on_combobox_42_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_42->setCurrentText("") ;
                 break;
             }
         }
@@ -12699,6 +12876,7 @@ void bazi2nafare_game::on_combobox_42_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_42->setCurrentText("") ;
                 break;
             }
         }
@@ -12713,7 +12891,7 @@ void bazi2nafare_game::on_combobox_42_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -12732,6 +12910,7 @@ void bazi2nafare_game::on_combobox_42_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_42->setCurrentText("") ;
                 break;
             }
         }
@@ -12748,7 +12927,7 @@ void bazi2nafare_game::on_combobox_42_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -12768,6 +12947,7 @@ void bazi2nafare_game::on_combobox_42_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_42->setCurrentText("") ;
                 break;
             }
         }
@@ -12782,7 +12962,7 @@ void bazi2nafare_game::on_combobox_42_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -12801,6 +12981,7 @@ void bazi2nafare_game::on_combobox_42_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_42->setCurrentText("") ;
                 break;
             }
         }
@@ -13162,6 +13343,7 @@ void bazi2nafare_game::on_combobox_43_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_43->setCurrentText("") ;
                 break;
             }
         }
@@ -13194,6 +13376,7 @@ void bazi2nafare_game::on_combobox_43_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_43->setCurrentText("") ;
                 break;
             }
         }
@@ -13209,7 +13392,7 @@ void bazi2nafare_game::on_combobox_43_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -13228,6 +13411,7 @@ void bazi2nafare_game::on_combobox_43_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_43->setCurrentText("") ;
                 break;
             }
         }
@@ -13245,7 +13429,7 @@ void bazi2nafare_game::on_combobox_43_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -13265,6 +13449,7 @@ void bazi2nafare_game::on_combobox_43_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_43->setCurrentText("") ;
                 break;
             }
         }
@@ -13279,7 +13464,7 @@ void bazi2nafare_game::on_combobox_43_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -13298,6 +13483,7 @@ void bazi2nafare_game::on_combobox_43_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_43->setCurrentText("") ;
                 break;
             }
         }
@@ -13658,6 +13844,7 @@ void bazi2nafare_game::on_combobox_44_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_44->setCurrentText("") ;
                 break;
             }
         }
@@ -13690,6 +13877,7 @@ void bazi2nafare_game::on_combobox_44_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_44->setCurrentText("") ;
                 break;
             }
         }
@@ -13704,7 +13892,7 @@ void bazi2nafare_game::on_combobox_44_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -13723,6 +13911,7 @@ void bazi2nafare_game::on_combobox_44_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_44->setCurrentText("") ;
                 break;
             }
         }
@@ -13740,7 +13929,7 @@ void bazi2nafare_game::on_combobox_44_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -13760,6 +13949,7 @@ void bazi2nafare_game::on_combobox_44_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_44->setCurrentText("") ;
                 break;
             }
         }
@@ -13774,7 +13964,7 @@ void bazi2nafare_game::on_combobox_44_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -13793,6 +13983,7 @@ void bazi2nafare_game::on_combobox_44_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_44->setCurrentText("") ;
                 break;
             }
         }
@@ -14154,6 +14345,7 @@ void bazi2nafare_game::on_combobox_45_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_45->setCurrentText("") ;
                 break;
             }
         }
@@ -14186,6 +14378,7 @@ void bazi2nafare_game::on_combobox_45_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_45->setCurrentText("") ;
                 break;
             }
         }
@@ -14200,7 +14393,7 @@ void bazi2nafare_game::on_combobox_45_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -14219,6 +14412,7 @@ void bazi2nafare_game::on_combobox_45_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_45->setCurrentText("") ;
                 break;
             }
         }
@@ -14235,7 +14429,7 @@ void bazi2nafare_game::on_combobox_45_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -14255,6 +14449,7 @@ void bazi2nafare_game::on_combobox_45_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_45->setCurrentText("") ;
                 break;
             }
         }
@@ -14269,7 +14464,7 @@ void bazi2nafare_game::on_combobox_45_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -14288,6 +14483,7 @@ void bazi2nafare_game::on_combobox_45_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_45->setCurrentText("") ;
                 break;
             }
         }
@@ -14650,6 +14846,7 @@ void bazi2nafare_game::on_combobox_46_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_46->setCurrentText("") ;
                 break;
             }
         }
@@ -14682,6 +14879,7 @@ void bazi2nafare_game::on_combobox_46_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_46->setCurrentText("") ;
                 break;
             }
         }
@@ -14697,7 +14895,7 @@ void bazi2nafare_game::on_combobox_46_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -14716,6 +14914,7 @@ void bazi2nafare_game::on_combobox_46_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_46->setCurrentText("") ;
                 break;
             }
         }
@@ -14732,7 +14931,7 @@ void bazi2nafare_game::on_combobox_46_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -14752,6 +14951,7 @@ void bazi2nafare_game::on_combobox_46_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_46->setCurrentText("") ;
                 break;
             }
         }
@@ -14766,7 +14966,7 @@ void bazi2nafare_game::on_combobox_46_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -14784,6 +14984,7 @@ void bazi2nafare_game::on_combobox_46_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_46->setCurrentText("") ;
                 break;
             }
         }
@@ -15145,6 +15346,7 @@ void bazi2nafare_game::on_combobox_47_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_47->setCurrentText("") ;
                 break;
             }
         }
@@ -15178,6 +15380,7 @@ void bazi2nafare_game::on_combobox_47_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_47->setCurrentText("") ;
                 break;
             }
         }
@@ -15193,7 +15396,7 @@ void bazi2nafare_game::on_combobox_47_activated(int index)
 
     case 4 :
     {
-        if(hen - free_hen >= 0)
+        if(hen - free_hen >= 0 && hen != 0)
         {
             if(free_worker != 0)
             {
@@ -15212,6 +15415,7 @@ void bazi2nafare_game::on_combobox_47_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_47->setCurrentText("") ;
                 break;
             }
         }
@@ -15229,7 +15433,7 @@ void bazi2nafare_game::on_combobox_47_activated(int index)
 
     case 5 :
     {
-        if(sheep - free_sheep >= 0)
+        if(sheep - free_sheep >= 0 && sheep != 0)
         {
             if(free_worker != 0)
             {
@@ -15249,6 +15453,7 @@ void bazi2nafare_game::on_combobox_47_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_47->setCurrentText("") ;
                 break;
             }
         }
@@ -15263,7 +15468,7 @@ void bazi2nafare_game::on_combobox_47_activated(int index)
 
     case 6 :
     {
-        if(cow - free_cow >= 0)
+        if(cow - free_cow >= 0 && cow != 0)
         {
             if(free_worker != 0)
             {
@@ -15282,6 +15487,7 @@ void bazi2nafare_game::on_combobox_47_activated(int index)
             else
             {
                 QMessageBox::information(this , "خطا" , "کارگر ازاد ندارید") ;
+                ui->combobox_47->setCurrentText("") ;
                 break;
             }
         }
