@@ -108,7 +108,7 @@ void bazi2nafare::on_comboBox_Lang_activated(int index)
         ui->Balance_lab->setText("موجودی بانکی :");
         ui->Balance_lab->move(370 , 260) ;
 
-        ui->Kapcha_lab->setText("کپچا :");
+        ui->Kapcha_lab->setText("kapcha :");
         ui->Kapcha_lab->move(360 , 300) ;
 
         break ;
